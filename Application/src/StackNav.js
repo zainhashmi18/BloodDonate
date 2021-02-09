@@ -5,8 +5,9 @@ import 'react-native-gesture-handler';
 import StartScreen from './screens/StartScreen';
 import LoginScreen from './screens/LoginScreen';
 import Registration from './screens/Registration';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DrawerNav from './DrawerNav';
+import { useState, useEffect } from 'react';
 
 const Stack = createStackNavigator();
 

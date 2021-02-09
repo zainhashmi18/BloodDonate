@@ -3,9 +3,37 @@ import { StyleSheet, View, Image, Text, Dimensions, TouchableOpacity, KeyboardAv
 import { Item, Label, Input, Form } from 'native-base';
 import 'react-native-gesture-handler';
 import Logo from "../Images/wdrop.png";
+import { useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const { width: WIDTH } = Dimensions.get("window")
-function LoginScreen({ navigation }) {
+function LoginScreen(props) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('')
+
+
+    const submitCred = async () => {
+        fetch("http://10.0.2.2:3000/signin", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "email": email,
+                "password": password
+            })
+        })
+            .then(res => res.json())
+            .then(async (data) => {
+                try {
+                    await AsyncStorage.setItem('token', data.token)
+                    props.navigation.replace("Main")
+                } catch (e) {
+                    console.log("error hai", e)
+                }
+            })
+    }
     return (
         <View style={styles.backgroundContainer}>
             <KeyboardAvoidingView behavior="position">
@@ -18,14 +46,14 @@ function LoginScreen({ navigation }) {
                     <Form style={{ marginHorizontal: 0 }}>
                         <Item style={{ marginHorizontal: 30, borderBottomWidth: 3, marginVertical: 10 }} floatingLabel>
                             <Label style={{ marginVertical: -12, color: "white" }}>Email</Label>
-                            <Input style={{ color: "white" }} />
+                            <Input style={{ color: "white" }} onChangeText={(e) => setEmail(e)} />
                         </Item>
                         <Item style={{ marginHorizontal: 30, borderBottomWidth: 3, marginVertical: 10 }} floatingLabel>
                             <Label style={{ marginVertical: -12, color: "white" }}>Password</Label>
-                            <Input style={{ color: "white" }} secureTextEntry />
+                            <Input style={{ color: "white" }} secureTextEntry onChangeText={(e) => setPassword(e)} />
                         </Item>
                         <View style={styles.btnContainer}>
-                            <TouchableOpacity onPress={() => navigation.navigate('Main')} style={styles.btn}><Text style={styles.text}>Sign in</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => submitCred(props)} style={styles.btn}><Text style={styles.text}>Sign in</Text></TouchableOpacity>
                         </View>
                     </Form>
 

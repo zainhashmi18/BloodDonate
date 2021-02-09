@@ -3,11 +3,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { StyleSheet, View, Image, Text, Dimensions, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import 'react-native-gesture-handler';
 import { Item, Label, Input, Form } from 'native-base';
-import { useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState } from "react";
 
 const { width: WIDTH } = Dimensions.get("window")
-function Registration() {
+function Registration(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [age, setAge] = useState("");
@@ -31,7 +31,7 @@ function Registration() {
                 console.log(data)
                 try {
                     await AsyncStorage.setItem('token', data.token)
-                    props.navigation.replace("home")
+                    props.navigation.replace("Login")
                 } catch (e) {
                     console.log("Error here", e);
                 }
